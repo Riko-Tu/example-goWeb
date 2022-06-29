@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "5e585c1a-183a-44be-9c9c-5f298b352c52",
+		"name": "example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "hello",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAwOTg5NjIsInVpZCI6IjE4Y2NlZTg4LWM1MTktM2RkZi05NzVkLWI1OGQ3ZDhmNzgyYiJ9.aqGNwFfjCfTqSxFYTTyxbml4LnwPVe-Tsz6GRe4iQY0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/turan/Desktop/八年级数学.md"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/json",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAwOTg5NjIsInVpZCI6IjE4Y2NlZTg4LWM1MTktM2RkZi05NzVkLWI1OGQ3ZDhmNzgyYiJ9.aqGNwFfjCfTqSxFYTTyxbml4LnwPVe-Tsz6GRe4iQY0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/turan/Desktop/八年级数学.md"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/json",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "name",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAwOTg5NjIsInVpZCI6IjE4Y2NlZTg4LWM1MTktM2RkZi05NzVkLWI1OGQ3ZDhmNzgyYiJ9.aqGNwFfjCfTqSxFYTTyxbml4LnwPVe-Tsz6GRe4iQY0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/turan/Desktop/八年级数学.md"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/name?name=小明&age=19",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"name"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "小明"
+						},
+						{
+							"key": "age",
+							"value": "19"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAwOTg5NjIsInVpZCI6IjE4Y2NlZTg4LWM1MTktM2RkZi05NzVkLWI1OGQ3ZDhmNzgyYiJ9.aqGNwFfjCfTqSxFYTTyxbml4LnwPVe-Tsz6GRe4iQY0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "password",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/login?username=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/:num/name",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDAwOTg5NjIsInVpZCI6IjE4Y2NlZTg4LWM1MTktM2RkZi05NzVkLWI1OGQ3ZDhmNzgyYiJ9.aqGNwFfjCfTqSxFYTTyxbml4LnwPVe-Tsz6GRe4iQY0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "password",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/user/asdasd/name",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"asdasd",
+						"name"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
