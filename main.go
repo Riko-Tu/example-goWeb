@@ -1,9 +1,16 @@
 package main
 
-import "turan.com/Example-goWeb/web/route"
+import (
+	"turan/Example-goWeb/admin/route"
+	"turan/example-goWeb/admin/db"
+)
 
 func main() {
-	err := route.SetUp()
+	err := db.SetUp()
+	if err!=nil{
+		panic(err.Error())
+	}
+	err = route.SetUp()
 	if err!=nil{
 		panic(err.Error())
 	}

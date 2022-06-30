@@ -12,9 +12,12 @@ type data struct {
 	Msg string `json:"msg"`
 }
 
+
+
+
 func route(engin *gin.Engine)  {
-	engin.GET("/hello",ginH)
-	engin.GET("/json",structJson)
+	engin.GET("/hello",sayNextMiddle,ginH)
+	engin.GET("/json",jsonAbortMiddle(),structJson)
 	engin.GET("/name",urlQuery)
 	engin.POST("/login",formLogin)
 	// tips: 避免路由匹配冲突
@@ -28,13 +31,28 @@ func route(engin *gin.Engine)  {
 			c.Request.URL.Path = "/hello" //修改参数路径
 			engin.HandleContext(c)		 //执行后续操作
 	})
+
+	//空路由
+	engin.NoRoute(func(c *gin.Context) {
+		c.Request.URL.Path = "/hello"
+		engin.HandleContext(c)
+	})
+}
+
+
+//路由组
+func user(engin *gin.Engine)  {
+	user := engin.Group("/user")
+	user.GET("/hello",ginH)
 }
 
 // 自定义gin.h json格式
 func ginH(c *gin.Context)  {
+	//从中间件获取值
+	say, _ := c.Get("say")
 	c.JSON(http.StatusOK,
 		gin.H{
-		"msg":"你好",
+		"msg":say,
 		"code":http.StatusOK,
 		"err":"xxx"})
 }

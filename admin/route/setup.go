@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 func SetUp() error {
 	engine := gin.Default()
 	route(engine)
+	user(engine)
 	err := engine.Run(":8080")
 	return err
 }
