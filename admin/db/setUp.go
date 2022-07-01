@@ -7,7 +7,7 @@ import (
 
 
 func SetUp() error {
-	db, err := gorm.Open("mysql", "root:123456@(localhost:80)/exercise?charset=utf8mb4&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:123456@(172.20.112.1:3308)/exercise.sql?charset=utf8mb4&parseTime=True")
 	defer db.Close()
 	return err
 }

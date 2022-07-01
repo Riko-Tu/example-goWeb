@@ -1,8 +1,9 @@
 package main
 
 import (
-	"turan/Example-goWeb/admin/route"
+
 	"turan/example-goWeb/admin/db"
+	"turan/example-goWeb/admin/route"
 )
 
 func main() {

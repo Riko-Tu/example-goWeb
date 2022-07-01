@@ -6,4 +6,5 @@ database:
   port: 80
   ip: localhost
   dbName:
-  docker: docker run -p 3306:3306 -v F:\goSRC\src\turan.com\example-goWeb\web\database:/mydata/mysql/data -e MYSQL_ROOT_PASSWORD=123456 b05128b000dd
+  xx: LsWqU73!@#
+  docker: docker run -it --name Tmysql  -p 3306:3306 -v /home/docker/mysql:/mydata/mysql/data -e MYSQL_ROOT_PASSWORD=123456 b05128b000dd
