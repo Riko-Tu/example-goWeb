@@ -37,6 +37,11 @@ func route(engin *gin.Engine)  {
 		c.Request.URL.Path = "/hello"
 		engin.HandleContext(c)
 	})
+
+
+
+	sql := engin.Group("/sql")
+	sql.GET("/course", sqlOne)
 }
 
 

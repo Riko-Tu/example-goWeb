@@ -1,7 +1,7 @@
 package main
 
 import (
-
+	_ "turan/example-goWeb/admin/dataload"
 	"turan/example-goWeb/admin/db"
 	"turan/example-goWeb/admin/route"
 )
