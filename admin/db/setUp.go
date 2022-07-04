@@ -18,12 +18,11 @@ func SetUp() error {
 	dbStr :=fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True",
 		username,password,ip,port,dbName)
 	var  err error
-
 	db, err = gorm.Open("mysql", dbStr)
-
 	db.SingularTable(true)
 	return err
 }
+
 func GetDB() *gorm.DB {
 	return db
 }

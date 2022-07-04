@@ -40,8 +40,6 @@ func route(engin *gin.Engine)  {
 
 
 
-	sql := engin.Group("/sql")
-	sql.GET("/course", sqlOne)
 }
 
 
