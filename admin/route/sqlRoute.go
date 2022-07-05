@@ -7,4 +7,7 @@ func sqlRoute(engin *gin.Engine)  {
 
 	sql.GET("/sqlTwo",sqlTwo)
 	sql.GET("/sqlOne", sqlOne)
+	sql.GET("/full",getScoreFull)
+	sql.GET("/sqlThree",sqlThree)
+	sql.GET("/sqlFour",sqlFour)
 }

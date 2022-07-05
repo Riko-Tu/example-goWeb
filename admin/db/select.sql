@@ -17,3 +17,7 @@ from
     (select * from Score union all select '07' as s_id, '01'as c_id, '0' as s_score union all  select  '06' as s_id,'02'as c_id,'0' as s_score) s ,
     (select * from Score union all select '07' as s_id, '01' as c_id, '0' as s_score)  s2 , Student S4
 where s.c_id ='01' and  s2.c_id ='02' and s.s_id =s2.s_id and s.s_score < s2.s_score and s.s_id = S4.s_id;
+
+-- 3、查询平均成绩大于等于60分的同学的学生编号和学生姓名和平均成绩
+SELECT S2.s_id,S.s_name, ROUND(avg(S2.s_score),1) as avg FROM Student S ,Score S2
+WHERE S2.s_id=S.s_id GROUP BY S2.s_id having avg >=60;

@@ -6,7 +6,7 @@ import (
 	"turan/example-goWeb/admin/db"
 )
 
-//查询"01"课程比"02"课程成绩高的学生的信息及课程分数
+
 type sqlRes struct {
 	Id string `gorm:"column:s_id"`
 	Name string `gorm:"column:s_name"`
@@ -16,7 +16,7 @@ type sqlRes struct {
 	Math string `gorm:"column:math"`
 }
 
-
+//查询"01"课程比"02"课程成绩高的学生的信息及课程分数
 func sqlOne(c *gin.Context)  {
 	course := c.Query("course")
 
@@ -47,6 +47,7 @@ func sqlOne(c *gin.Context)  {
 
 }
 
+//-- 2、查询"01"课程比"02"课程成绩低的学生的信息及课程分数
 func sqlTwo(c *gin.Context)  {
 
 	sql := `
@@ -61,5 +62,77 @@ func sqlTwo(c *gin.Context)  {
 		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
 	}else {
 		c.JSON(http.StatusOK,res)
+	}
+}
+
+
+type scoreFull struct {
+	Id string `gorm:"column:s_id"`
+	Name string `gorm:"column:s_name"`
+	Birth string `gorm:"column:s_birth"`
+	Sex string `gorm:"column:s_sex"`
+	Full string `gorm:"column:full"`
+}
+
+//# 返回所有学生的总分成绩和信息
+func getScoreFull(c *gin.Context)  {
+
+	offSet := c.DefaultQuery("offset","0")
+	limit := c.DefaultQuery("limit","2")
+	sql :=`
+	select s4.*,s.s_score+s2.s_score+s3.s_score as full from Score s,Score s2 ,Score s3 ,Student s4 where s.c_id ='01' and  s2.c_id ='02' and
+                                                        s3.c_id='03'and s.s_id = s4.s_id =s2.s_id =s3.s_id order by full limit ?,?`
+	var scoreFull []*scoreFull
+	err := db.GetDB().Raw(sql, offSet, limit).Scan(&scoreFull).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
+	}else {
+		c.JSON(http.StatusOK,scoreFull)
+	}
+}
+
+
+
+//查询平均成绩 大于等于60分的同学的学生编号和学生姓名和平均成绩
+func sqlThree(c *gin.Context)  {
+	type sqlThreeRes struct {
+		Id string `gorm:"column:s_id"`
+		Name string `gorm:"column:s_name"`
+		Avg string `gorm:"column:avg"`
+	}
+	var sqlThree []*sqlThreeRes
+	sql := `
+
+		SELECT S2.s_id,S.s_name, ROUND(avg(S2.s_score),1) as avg FROM Student S ,Score S2 
+		WHERE S2.s_id=S.s_id GROUP BY S2.s_id having avg >=60;
+		`
+	err := db.GetDB().Raw(sql).Scan(&sqlThree).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
+	}else {
+		c.JSON(http.StatusOK,sqlThree)
+	}
+}
+
+func sqlFour(c *gin.Context)  {
+	type sqlFourRes struct {
+		Id string `gorm:"column:s_id"`
+		Name string `gorm:"column:s_name"`
+		Avg string `gorm:"column:avg"`
+	}
+	var fourRes []*sqlFourRes
+
+	sql :=`
+
+select s2.s_id,s.s_name, round(avg(s2.s_score),2) as avg  from Student s , Score s2
+where s.s_id =s2.s_id group by s2.s_id , s.s_name having avg<=60
+union select s_id ,s_name,0 as avg from Student
+where s_id not in (select distinct  s_id from Score  ) `
+
+	err := db.GetDB().Raw(sql).Scan(&fourRes).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
+	}else {
+		c.JSON(http.StatusOK,fourRes)
 	}
 }
