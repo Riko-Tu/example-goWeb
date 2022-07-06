@@ -136,3 +136,45 @@ where s_id not in (select distinct  s_id from Score  ) `
 		c.JSON(http.StatusOK,fourRes)
 	}
 }
+
+func sqlFifth(c *gin.Context)  {
+	type fifthRes struct {
+		Id string `gorm:"column:s_id"`
+		Name string `gorm:"column:s_name"`
+		Course string `gorm:"column:course"`
+		Total string `gorm:"column:total"`
+	}
+	var fifth []*fifthRes
+	sql:=`
+			select a.s_id,b.s_name, count(a.c_id) as course ,sum(a.s_score) as total
+			from Score a join Student b on a.s_id=b.s_id group by a.s_id ,b.s_name
+			`
+	err := db.GetDB().Raw(sql).Scan(&fifth).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
+	}else {
+		c.JSON(http.StatusOK,fifth)
+	}
+}
+
+func sqlSeventh(c *gin.Context)  {
+	type sqlSeventhRes struct {
+		Id string `gorm:"column:s_id"`
+		Name string `gorm:"column:s_name"`
+		Birth string `gorm:"column:s_birth"`
+		Sex string `gorm:"column:s_sex"`
+	}
+	var sqlSeventh []*sqlSeventhRes
+	sql:=`
+select * from Student
+where s_id in  (select s_id from Score where  c_id =
+( select c_id from  Course where t_id =(select t_id from Teacher where t_name = '张三')) group by s_id)`
+
+	err := db.GetDB().Raw(sql).Scan(&sqlSeventh).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,gin.H{"err":err.Error()})
+	}else {
+		c.JSON(http.StatusOK,sqlSeventh)
+	}
+
+}
