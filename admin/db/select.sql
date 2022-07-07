@@ -99,6 +99,41 @@ select b.s_id,b.s_name, round(avg(a.s_score),2) avgScore from Score a, Student b
 where a.s_score < 60 and a.s_id = b.s_id group by  a.s_id having  count(a.c_id)>=2 ;
 
 
+-- 16、检索"01"课程分数小于60，按分数降序排列的学生信息
+
+select b.*
+from Score a , Student b where  a.c_id ='01'and a.s_score<60 and b.s_id=a.s_id order by s_score desc ;
+
+
+
+
+-- 17、按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩
+
+
+
+select a.s_id,a.s_score,b.s_score from (select * from Score where c_id = '01') a   JOIN
+              (select * from Score where  c_id='02') b  ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
