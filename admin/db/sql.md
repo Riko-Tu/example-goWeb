@@ -1140,72 +1140,192 @@ drop view [视图名]
 show create view [视图名]
 ~~~
 
-### 变量
-
-#### 系统变量
+### 系统变量
 
 全局变量 global	:	  针对所有回话连接有效，服务器重启后，变量重置
 
 回话变量 session  : 针对单个连接
 
-##### 1. 查看变量
+#### 1. 查看变量
 
 ~~~sql
 show global variables；
 show session variables;
 ~~~
 
-##### 2.模糊查找
+####  2.模糊查找
 
 ~~~sql
 show global variables like 'admin%';
 show session variables like 'admin%';
 ~~~
 
-##### 3.条件查找
+#### 3.名称查找
 
 ~~~sql
 select @@global.admin_tls_version ;
 select @@admin_port ;
 ~~~
 
-##### 4.变量赋值
+#### 4.变量赋值
 
 ~~~sql
 set @@global.admin_tls_version = 0 ;
 select @@admin_port =0 ;
 ~~~
 
+### 自定义变量
 
+- 用户变量 ： 针对当前会话有效，类似系统会话（session）变量
 
-#### 自定义变量
+##### 1. 声明 和 更新变量
 
-用户变量 ： 针对当前会话有效，类似系统会话变量
-
-##### 1. 变量声明 和 更新变量值
+- 方式一
 
 ~~~sql
+set @name = 123;     //用户变量
+~~~
+
+- 方式二
+
+~~~sql
+ // 将学生表的数量复制给studentNumb
+select count(id) into @studentNumb from student		 //用户变量
+~~~
+
+##### 2. 使用变量
+
+~~~sql
+select @name;    //用户变量  
+~~~
+
+- 局部变量： 定义它的begin end中有效
+
+~~~sql
+create procedure my3(in id int)
+begin
+    declare result varchar(20) default '';   //局部变量申明
+    select s_name into result from			//局部变量赋值
+                            Student
+                                where s_id=id;
+    select result;							//局部变量使用
+
+end;
 ~~~
 
 
 
-##### 2. 
+
+
+### 存储过程
+
+- 适用于增删改查
+- 减少连接次数，提高性能
+
+#### 1. 无参过程
+
+- 创建
+
+~~~sql
+CREATE PROCEDURE MYP1()
+BEGIN
+    select * from Student;
+
+end;
+~~~
+
+- 使用
+
+~~~sql
+call MYP1();
+~~~
+
+#### 2. in过程
+
+- 创建
+
+~~~sql
+create procedure my3(in id int,in score varchar(20))
+begin
+    declare result varchar(20) default '';   //局部变量申明
+    select s_name into result from			//局部变量赋值
+                            Student
+                                where s_id=id;
+    select result;							//局部变量使用
+
+end;
+
+~~~
+
+- 使用
+
+~~~sql
+set @studentNumb =08;  				//声明用户变量
+
+call my3(@studentNumb);	//使用用户变量
+~~~
+
+#### 3. out过程
+
+- 创建
+
+~~~sql
+create procedure myout1(in id int,out name varchar(20),out sex varchar(20))
+begin
+    select s_name,s_sex into name,sex    //直接賦值
+    from Student where  s_id =id;
+end;
+~~~
+
+- 使用
+
+~~~sql
+call myout1(@studentNumb,@stName,@stSex);   //声明并赋值
+select @stName,@stSex;
+~~~
+
+#### 4. inout过程
+
+- 创建
+
+~~~sql
+
+create procedure myinout(inout numb int)
+begin
+    set numb = numb * 2;
+end;
+
+~~~
+
+- 使用
+
+~~~sql
+set @n = 10;		//声明变量并赋值
+call myinout(@n);	//传入皆返回
+
+select @n;			//查看变量值
+~~~
+
+#### 5. 删除过程
+
+~~~sql
+drop procedure [过程名];      
+~~~
+
+#### 6. 查看过程
+
+~~~sql
+show create procedure my3;
+~~~
 
 
 
-##### 3. 
+### 函数
+
+- 适用于查询
+- 有且仅有一个返回值
+
+#### 1. 创建函数
 
 
-
-
-
-
-
-
-
-
-
-##### 
-
-##### 
 
