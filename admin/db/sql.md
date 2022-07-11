@@ -1163,15 +1163,15 @@ show session variables like 'admin%';
 #### 3.名称查找
 
 ~~~sql
-select @@global.admin_tls_version ;
-select @@admin_port ;
+select @@global.admin_tls_version ;			//全局变量
+select @@admin_port ;				//全局变量
 ~~~
 
 #### 4.变量赋值
 
 ~~~sql
-set @@global.admin_tls_version = 0 ;
-select @@admin_port =0 ;
+set @@global.admin_tls_version = 0 ;   //全局变量
+set @@admin_port =0 ;					//回话变量
 ~~~
 
 ### 自定义变量
@@ -1323,9 +1323,156 @@ show create procedure my3;
 ### 函数
 
 - 适用于查询
-- 有且仅有一个返回值
+- 有且仅有一个返回值‘
+- 在MySQL8.x 中, 不能直接创建函数 , 需要首先设置 `log_bin_trust_function_creators=true` , 才可以;
+
+~~~sql
+set GLOBAL log_bin_trust_function_creators=TRUE; # 修改默认值为true
+~~~
+
+
 
 #### 1. 创建函数
 
+- 无参函数
 
+~~~sql
+create function f1() returns int
+begin 
+	set @stdNumb =0;
+	select count(1) into @stdNumb from Student;
+	return @stdNumb;
+end;
+~~~
+
+- 有参函数
+
+~~~sql
+
+create function f2(stdName varchar(20)) returns int
+    begin
+        set @stdID = 0;
+        select s_id into @stdID from  Student where s_name = stdName;
+        return @stdID;
+
+    end;
+~~~
+
+
+
+#### 2. 调用函数
+
+~~~sql
+select f2('赵雷') as id ;
+select f1() ;
+~~~
+
+
+
+#### 3.查看函数
+
+~~~sql
+show create function f1;
+~~~
+
+
+
+#### 3. 删除函数
+
+~~~sql
+drop function f1;
+~~~
+
+### 流程控制结构
+
+#### 1. 
+
+
+
+
+
+### mysql 高级
+
+#### 1. 主要配置文件
+
+- 二进制日志log-bin
+
+  功能：主从复制；默认不开启
+
+  ~~~txt
+  [mysqld]
+  log-bin = /etc/mysql
+  ~~~
+
+- 错误日志log-err
+
+  功能：记录严重的警告和错误信息，每次启动和关闭的详细信息；默认不开启
+
+  ~~~txt
+  [mysqld]
+  log-err = /etc/mysql
+  ~~~
+
+- 查询日志
+
+  功能：记录数据库的查询语句；默认不开启
+
+- 数据文件
+
+  - frm 文件： 存放表结构
+  - myd 文件： 存放表数据
+  - myi 文件 ：存放表索引
+
+#### 2. 设计架构
+
+- 1. 连接层
+-     2. 服务层
+-       3.引擎层
+-    4.存储层
+
+#### 3. 查看存储引擎
+
+- 查看已提供的引擎
+
+~~~sql
+show engines ;
+~~~
+
+- 查看当前使用的引擎
+
+~~~sql
+show variables like '%storage_engine%';
+~~~
+
+#### 4. 主流引擎对比
+
+
+
+|          | myiSAM     | innoDB                                                       |
+| -------- | ---------- | ------------------------------------------------------------ |
+| 主外键   | 不支持     | 支持                                                         |
+| 事务     | 不支持     | 支持                                                         |
+| 行，表锁 | 表锁       | 行锁                                                         |
+| 缓存     | 只缓存索引 | 缓存索引和真实数据，对内存要求高<br />，内存的大小对性能有决定性的影响 |
+| 表空间   | 小         | 大                                                           |
+| 关注点   | 性能       | 事务                                                         |
+|          |            |                                                              |
+
+#### 5. sql执行顺序
+
+~~~sql
+1.   FROM
+2.   on
+3.   join
+4.   where
+5.   group by
+6.   having
+7.   select
+8.   order by 
+9.   limit
+~~~
+
+#### 6. 索引
+
+- 定义：排好序的快速查找数据结构
 
