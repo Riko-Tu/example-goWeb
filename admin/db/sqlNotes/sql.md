@@ -1475,4 +1475,102 @@ show variables like '%storage_engine%';
 #### 6. 索引
 
 - 定义：排好序的快速查找数据结构
+- mysqlinnoDB：b+tree
+
+##### 1. 适合建索引
+
+![适合建索引](.\适合建索引.jpg)
+
+##### 2.  查看索引参数
+
+~~~sql
+show index from Student;
+~~~
+
+![索引参数](.\索引参数.jpg)
+
+##### 3.创建索引
+
+~~~sql
+create unique index  idx_teacher_name on Teacher(t_name);  //创建唯一索引
+create  index  idx_teacher_name on Teacher(t_name);  //创建非唯一索引
+~~~
+
+##### 4. 删除索引
+
+~~~sql
+~~~
+
+
+
+
+
+
+
+
+
+#### 7.常见瓶颈
+
+![常见瓶颈](.\常见瓶颈.jpg)
+
+#### 8.explain
+
+##### 1. 执行计划包含的信息
+
+~~~sql
+explain select b.s_id,b.s_name, round(avg(a.s_score),2) avgScore from Score a, Student b
+where a.s_score < 60 and a.s_id = b.s_id group by  a.s_id having  count(a.c_id)>=2 ;
+~~~
+
+- id	
+
+  ~~~txt
+  1. id相同顺序执行
+  2. id不同数值大的先执行
+  ~~~
+
+- select_type![select_type](.\select_type.jpg)
+
+- table
+
+  ~~~sql
+  指示数据来自哪张表
+  ~~~
+
+- type
+
+  ![type](.\type.jpg)
+
+![type-解释](.\type-解释.jpg)
+
+- possible_keys
+
+  ~~~
+  可能会用上的索引
+  ~~~
+
+- key
+
+  ~~~
+  查询时，使用了的索引
+  ~~~
+
+- ref
+
+  ~~~sql
+  索引被引用的实际字段；库名.表名.字段
+  ~~~
+
+- rows
+
+  ~~~sql
+  被查询过的表行数
+  ~~~
+
+- extra
+
+  ~~~sql
+  ~~~
+
+  
 
