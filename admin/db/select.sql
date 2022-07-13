@@ -109,35 +109,41 @@ from Score a , Student b where  a.c_id ='01'and a.s_score<60 and b.s_id=a.s_id o
 
 -- 17、按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩
 
+show create view course_s;
+
+select * from course_s;
+
+show index from Score;
+
+
+explain select a.s_id,(select s_score from Score where a.s_id =s_id and c_id ='01'),
+       (select s_score from Score where a.s_id =s_id and c_id ='02'),
+       (select s_score from Score where a.s_id =s_id and c_id ='03'),
+               avg(a.s_score)
+from Score a group by s_id;
+
+
 
 
 -- 18.查询各科成绩最高分、最低分和平均分：以如下形式显示：课程ID，课程name，最高分，最低分，平均分，及格率，中等率，优良率，优秀率
 -- 及格为>=60，中等为：70-80，优良为：80-90，优秀为：>=90
 
-select  c_id,c_name ,(select ) from Course;
 
 
-select c_id,max(s_score) max,min(s_score) min ,avg(s_score) avg ,
-       (select count(c_id)/6 from Score where s_score>=60 group by c_id)
-from Score s where c_id in (select  c_id  from Course) group by c_id;
+select s.c_id,max(s_score) max,min(s_score) min ,round(avg(s_score),2) avg ,
+       (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=60 group by c_id having s.c_id=c_id) 及格率,
+       (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=70 AND s_score <=80 group by c_id having s.c_id=c_id) 中等率,
+    (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=80 AND s_score <=90 group by c_id having s.c_id=c_id) 优良率,
+       ifnull((select round(count(s_id)/count(s.s_id),2) from Score where s_score>=90 group by c_id having s.c_id=c_id),0) 优秀率
 
+from Score s where s.c_id in (select  c_id  from Course) group by c_id;
 
-
-select a.c_id,max(s_score) max,min(s_score) min ,round(avg(s_score),2) avg,
-       (select count(c_id)/6 from Score where s_score>=60 group by c_id) 及格率
-from Score a left join Course b on a.c_id = b.c_id group by a.c_id;
-
-
-(select count(c_id)/6,c_id from Score where s_score>=60 group by c_id) 及格率
-(select count(c_id)/6,c_id from Score where s_score>=70 AND s_score <=80 group by c_id) 中等率
-(select count(c_id)/6,c_id from Score where s_score>=80 AND s_score <=90 group by c_id) 优良率
-(select count(c_id)/6,c_id from Score where s_score>=90 group by c_id) 优秀率;
 
 -- 19、按各科成绩进行排序，并显示排名
 -- mysql没有rank函数
 
-select c.*,d.s_name from (select a.*,b.c_name from Score  a left join Course b on a.c_id = b.c_id) c
-    left join Student d on c.s_id=d.s_id
+
+
 
 
 -- 20、查询学生的总成绩并进行排名
