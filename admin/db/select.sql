@@ -128,9 +128,9 @@ from Score a group by s_id;
 -- 18.查询各科成绩最高分、最低分和平均分：以如下形式显示：课程ID，课程name，最高分，最低分，平均分，及格率，中等率，优良率，优秀率
 -- 及格为>=60，中等为：70-80，优良为：80-90，优秀为：>=90
 
+set global long_query_time =1;
 
-
-select s.c_id,max(s_score) max,min(s_score) min ,round(avg(s_score),2) avg ,
+explain select s.c_id,max(s_score) max,min(s_score) min ,round(avg(s_score),2) avg ,
        (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=60 group by c_id having s.c_id=c_id) 及格率,
        (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=70 AND s_score <=80 group by c_id having s.c_id=c_id) 中等率,
     (select round(count(s_id)/count(s.s_id),2) from Score where s_score>=80 AND s_score <=90 group by c_id having s.c_id=c_id) 优良率,

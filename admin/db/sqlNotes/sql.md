@@ -735,7 +735,7 @@ SELECT 查询列表 FROM TABLE WHERE 筛选条件 ORDER BY conlumn 1 ASC, conlum
 
 ### 表的管理
 
-#### 创建 
+#### 创建表
 
 - 语法
 
@@ -766,7 +766,7 @@ SELECT 查询列表 FROM TABLE WHERE 筛选条件 ORDER BY conlumn 1 ASC, conlum
   
   
 
-#### 修改
+#### 修改字段
 
 - 语法
 
@@ -808,7 +808,7 @@ SELECT 查询列表 FROM TABLE WHERE 筛选条件 ORDER BY conlumn 1 ASC, conlum
 
   
 
-#### 删除
+#### 删除表
 
 - 删除表
 
@@ -818,7 +818,7 @@ SELECT 查询列表 FROM TABLE WHERE 筛选条件 ORDER BY conlumn 1 ASC, conlum
 
   
 
-#### 复制
+#### 复制表
 
 - 只复制表的结构
 
@@ -1499,6 +1499,7 @@ create  index  idx_teacher_name on Teacher(t_name);  //创建非唯一索引
 ##### 4. 删除索引
 
 ~~~sql
+DROP INDEX idx_student_name ON Student ;
 ~~~
 
 
@@ -1513,9 +1514,7 @@ create  index  idx_teacher_name on Teacher(t_name);  //创建非唯一索引
 
 ![常见瓶颈](.\常见瓶颈.jpg)
 
-#### 8.explain
-
-##### 1. 执行计划包含的信息
+#### 8.explain -执行计划
 
 ~~~sql
 explain select b.s_id,b.s_name, round(avg(a.s_score),2) avgScore from Score a, Student b
@@ -1570,7 +1569,78 @@ where a.s_score < 60 and a.s_id = b.s_id group by  a.s_id having  count(a.c_id)>
 - extra
 
   ~~~sql
+  
   ~~~
-
   
 
+#### 9. 索引优化
+
+- 单表
+
+~~~sql
+索引建立：
+	1. 必须建议在等于条件字段上
+	2. 建议索引在区间范围内，会触发filesort
+~~~
+
+- 双表
+
+~~~sql
+索引建立：
+	1. 左连接时，索引需建立在右边的字段
+	2. 右连接时，索引需建立在左边的字段
+~~~
+
+- 三表
+
+~~~sql
+索引建立：
+	1. 左连接时，索引需建立在右边的字段
+	2. 右连接时，索引需建立在左边的字段
+	3. 小表驱动大表
+~~~
+
+##### 1. 索引失效
+
+![索引失效](\索引失效.jpg)
+
+- 解释
+
+  ~~~txt
+  使用复合索引时（123）；
+  		使用 12,时，可用上12；
+  		使用 23时， 无法使用索引，type为ALL
+  		使用 13时，  可用上1,无法使用3；
+  		总结：复合索引使用缺1，或者缺少2，都会造成索引失效
+  ~~~
+
+#### 9.慢查询日志
+
+##### 1. 查看日志开启
+
+~~~sql
+show variables like '%slow_query_log%';
+~~~
+
+##### 2.开启日志
+
+~~~sql
+set @@global.slow_query_log =1;
+~~~
+
+##### 3. 查看和修改时间
+
+~~~sql
+show variables like '%long_query_time%';
+set global long_query_time =3;   //修改后直接生效
+~~~
+
+##### 4.查看已执行的慢sql数
+
+~~~sql
+show global  status  like '%Slow_queries%';
+~~~
+
+##### 5. mysqldumpslow
+
+![mysqldumpslow](\mysqldumpslow.jpg)
