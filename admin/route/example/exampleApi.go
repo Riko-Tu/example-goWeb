@@ -1,4 +1,4 @@
-package route
+package example
 
 import (
 	"github.com/gin-gonic/gin"
@@ -42,12 +42,6 @@ func route(engin *gin.Engine)  {
 
 }
 
-
-//路由组
-func user(engin *gin.Engine)  {
-	user := engin.Group("/user")
-	user.GET("/hello",ginH)
-}
 
 // 自定义gin.h json格式
 func ginH(c *gin.Context)  {

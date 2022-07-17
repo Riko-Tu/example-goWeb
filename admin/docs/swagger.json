@@ -1,0 +1,54 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/sendEmailCode": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "发送手机验证码",
+                "parameters": [
+                    {
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "请求错误",
+                        "schema": {
+                            "$ref": "#/definitions/route.Code"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/route.Code"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "route.Code": {
+            "type": "object",
+            "properties": {
+                "err": {
+                    "type": "string"
+                },
+                "statusCode": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
