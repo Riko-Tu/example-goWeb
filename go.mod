@@ -21,7 +21,7 @@ require (
 	github.com/subosito/gotenv v1.4.0 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe
 	github.com/swaggo/gin-swagger v1.5.1
-	github.com/swaggo/swag v1.8.3 // indirect
+	github.com/swaggo/swag v1.8.3
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect

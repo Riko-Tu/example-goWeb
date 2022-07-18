@@ -14,10 +14,15 @@ func user(engin *gin.Engine)  {
 	engin.POST("/registerEmail",RegisterEmail)
 }
 
+func experiment(engine *gin.Engine)  {
+	engine.POST("/experiment",queryExperiment)
+}
+
+
 func SetUp() error {
 	engine := gin.Default()
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-
+	experiment(engine)
 	user(engine)
 	err := engine.Run(":8080")
 	return err
