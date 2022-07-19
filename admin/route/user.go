@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"turan/example-goWeb/admin/cache"
 	"turan/example-goWeb/admin/model"
+	"turan/example-goWeb/admin/mq"
 	"turan/example-goWeb/admin/utils"
 )
 
@@ -151,8 +152,10 @@ func sendEmailCode(ctx *gin.Context)  {
 	//生产验证码
 	code := utils.GetCode()
 
+	emailAndCode := utils.Email{email,code}
 	//发送断行
-	err := utils.SendEmail(email, code)
+
+	err := mq.EmailQueue(emailAndCode)
 	if err!=nil {
 		ServerBusy.Err = err.Error()
 		ctx.JSON(http.StatusInternalServerError,ServerBusy)

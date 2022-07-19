@@ -16,6 +16,7 @@ require (
 	github.com/goccy/go-json v0.9.10 // indirect
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/nsqio/go-nsq v1.1.0
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
 	github.com/spf13/viper v1.12.0
 	github.com/subosito/gotenv v1.4.0 // indirect

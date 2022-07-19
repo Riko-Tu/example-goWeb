@@ -3,7 +3,9 @@ package main
 import (
 	_ "turan/example-goWeb/admin/dataload"
 	"turan/example-goWeb/admin/db"
+	"turan/example-goWeb/admin/mq"
 	"turan/example-goWeb/admin/route"
+
 )
 
 func setUp() {
@@ -11,7 +13,13 @@ func setUp() {
 	//if err!=nil {
 	//	panic(err.Error())
 	//}
-	err := db.SetUp()
+	go mq.InitConsumer()
+	err := mq.InitProducer()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer mq.GetProduce().Stop()
+	err = db.SetUp()
 	if err != nil {
 		panic(err.Error())
 	}
