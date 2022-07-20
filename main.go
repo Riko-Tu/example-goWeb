@@ -1,6 +1,7 @@
 package main
 
 import (
+	"turan/example-goWeb/admin/cache"
 	_ "turan/example-goWeb/admin/dataload"
 	"turan/example-goWeb/admin/db"
 	"turan/example-goWeb/admin/mq"
@@ -9,12 +10,12 @@ import (
 )
 
 func setUp() {
-	//err := cache.SetUp()
-	//if err!=nil {
-	//	panic(err.Error())
-	//}
+	err := cache.SetUp()
+	if err!=nil {
+		panic(err.Error())
+	}
 	go mq.InitConsumer()
-	err := mq.InitProducer()
+	err = mq.InitProducer()
 	if err != nil {
 		panic(err.Error())
 	}

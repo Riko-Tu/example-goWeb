@@ -155,15 +155,12 @@ func sendEmailCode(ctx *gin.Context)  {
 	emailAndCode := utils.Email{email,code}
 	//发送断行
 
-	err := mq.EmailQueue(emailAndCode)
-	if err!=nil {
-		ServerBusy.Err = err.Error()
-		ctx.JSON(http.StatusInternalServerError,ServerBusy)
-		return
-	}
+	go  mq.EmailQueue(emailAndCode)
+
+
 
 	//存储验证码
-	err = cache.SetAndTime(email, code,cache.TENMIN)
+	err := cache.SetAndTime(email, code,cache.TENMIN)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError,err.Error())
 		return
