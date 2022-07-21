@@ -123,3 +123,43 @@ func main() {
 #### make创建切片内存分布
 
 ![make创建切片的内部分布](make创建切片的内部分布.jpg)
+
+### string与slice与byte的关系
+
+![string,slice,byte](string,slice,byte.png)
+
+
+
+### string修改
+
+~~~go
+	s := "qqqq"
+	bs := []byte(s)
+	bs[2] ='w'
+	s = string(bs)
+	fmt.Printf(s)
+~~~
+
+### map
+
+- 使用map前需要make申请空间
+
+~~~go
+m := make(map[string]string)  ,默认分配一个空间，并会自动增长
+
+~~~
+
+### 结构体
+
+- 结构体的值在内存中是连接的
+
+#### 值类型内存分布
+
+![结构体内部分布](结构体内部分布.png)
+
+#### 引用类型内存分布
+
+![结构体存在引用类型内部分布](结构体存在引用类型内部分布.jpg)
+
+
+
