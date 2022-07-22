@@ -163,3 +163,230 @@ m := make(map[string]string)  ,默认分配一个空间，并会自动增长
 
 
 
+#### 结构体显示转换要求
+
+- 成员个数，成员名称，成员类型都必须相同，三者缺一不可
+
+~~~go
+type A struct {
+	NUB int
+}
+
+type B struct {
+	NUB int
+}
+
+func main() {
+	a := A{}
+	b := B{}
+	a = A(b)    //个数，名称，类型相同，可转换成功
+	fmt.Println(a)
+}
+
+~~~
+
+#### 结构体方法调用内存分布
+
+![结构体调用方法内存图](结构体调用方法内存图.jpg)
+
+- 方法调用和函数机制一样
+- 结构体调用时，也会将自身拷贝到对应的方法栈中
+
+#### 结构体实现String方法
+
+~~~go
+type A struct {
+	NUB int
+}
+
+func (a A) String() string {  
+	return fmt.Sprintf("{NUB = %d}",a.NUB)
+}
+
+
+func main() {
+	a := A{
+		1,
+	}
+	fmt.Println(a)  //此处自动String方法
+}
+
+~~~
+
+#### 结构体的值方法和指针方法
+
+~~~go
+type A struct {
+	NUB int
+}
+
+func (a A) name1() {
+	a.NUB = 2
+}
+
+func (a *A) name()  {
+	a.NUB = 3
+}
+
+func main() {
+	a := A{1}   //创建一个值类型
+	a.name1()		//调用一个值方法，在name1栈中的a属于值拷贝
+	fmt.Println(a.NUB)
+	a.name()   		//调用一个指针方法，在name栈中的a属于指针拷贝
+	fmt.Println(a.NUB)
+}
+
+
+~~~
+
+
+
+
+
+#### 继承语法
+
+~~~go
+package main
+
+import "fmt"
+
+type A struct {
+	NUB int
+}
+
+func(a A)getN()  {
+	fmt.Println(a.NUB)
+}
+type B struct {
+	A
+	name string
+}
+
+func(b B)getn()  {
+	fmt.Println(b.name)
+}
+
+func main() {
+	b :=B{A{1},"s"}  //结构体嵌套，B可继承A的所有方法和属性   
+	a:=A{}
+	a.getN()
+	fmt.Println(b.NUB,b.name)
+	b.getN()
+	b.getn()
+}
+
+
+~~~
+
+### 接口
+
+- 空接口类型可接受所有类型
+- 接口是引用类型只能接受指针
+
+#### 结构体实现接口
+
+~~~go
+package main
+
+import "fmt"
+
+type A struct {    //A必须实现Usb的所有抽象方法才算实现了接口
+	NUB int
+}
+func (a A) get() int  {
+    return a.NUB
+}
+func (a A) set(i int) {
+	a.NUB = i
+}
+
+type Usb interface {
+	get() int
+	set(int2 int)
+}
+
+
+func main() {
+	a:=A{1}
+	a.set(4)
+	a.get()
+}
+
+~~~
+
+#### 接口多态数组和类型断言
+
+~~~go
+package main
+
+type A struct {    //A必须实现Usb的所有抽象方法才算实现了接口
+	NUB int
+}
+func (a A) get() int  {  //A的共有方法
+	return a.NUB
+}
+func (a A) A(i int) {   //A的私有方法
+	a.NUB = i
+}
+
+type B struct {    //A必须实现Usb的所有抽象方法才算实现了接口
+	NUB int
+}
+func (b B) get() int  {  //B的共有方法
+	return b.NUB
+}
+func (a A) B(i int) {   //b的私有方法
+	a.NUB = i
+}
+
+type Usb interface {
+	get() int
+}
+
+
+func main() {
+	u := make([]Usb,2,2)   //通过接口实现多态数组
+    
+	a := A{}
+	b := B{}
+	u[0] = a
+	u[1] = b
+	for _, v := range u {
+		switch  i:= v.(type) {   //类型断言调用私有方法
+		case A:
+			i.A(1)
+		case B:
+			i.B(3)
+		}
+	}
+}
+~~~
+
+### goroutine
+
+#### 进程和线程的介绍
+
+#### ![进程和线程基本介绍](进程和线程基本介绍.jpg)
+
+#### 并发和并行介绍
+
+![并发和并行介绍](并发和并行介绍.jpg)
+
+
+
+#### go的程和主线程介绍
+
+![协程和主线程介绍](协程和主线程介绍.jpg)
+
+#### 协程工作流介绍
+
+![go 协程工作流程](go 协程工作流程.jpg)
+
+
+
+#### MPG模式调度模型
+
+
+
+
+
