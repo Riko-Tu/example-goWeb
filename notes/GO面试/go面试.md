@@ -388,5 +388,180 @@ func main() {
 
 
 
+#### map并发安全
+
+~~~go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var (
+	m = make(map[string]string)
+	lock = &sync.Mutex{}
+)
 
 
+func test(i string)  {
+	lock.Lock()
+	m[i] = i   //并发写map会有安全问题，需要加锁
+	lock.Unlock()
+}
+
+func main()  {
+	for i := 0; i < 200; i++ {
+		go test(string(i))
+		lock.Lock()
+		fmt.Println(m)   //加锁
+		lock.Unlock()
+	}
+	time.Sleep(10*time.Second)
+
+}
+~~~
+
+
+
+### channel
+
+
+
+- channel是并发协程安全，不会出现资源竞争
+
+#### 基本使用
+
+~~~go
+package main
+
+import (
+	"fmt"
+)
+
+
+func main()  {
+
+	ch := make(chan int,2)   //创建一个缓冲为3的channel
+	fmt.Printf("ch的地址%p ch的值%v ",&ch,ch)   //channel是引用类型，值指向一个int的队列
+	//写入数据
+	ch <- 200
+	ch <- 200
+	ch <- 200  //超过缓冲数写入报错
+	//取出数据
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)   // 取完了数据，继续取出报错
+
+}
+~~~
+
+#### 管道的关闭和遍历
+
+- 关闭：channel关闭后，不能写只能读
+- 遍历：channel的遍历只能对已关闭的管道使用，对未关闭的关闭使用会报错
+
+~~~go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func writeData (ch chan int)  {
+	defer close(ch)
+	for i := 0; i < 50; i++ {
+		ch<-i
+		time.Sleep(100)
+	}
+}
+
+func readData(ch chan int,c chan bool)  {
+	for v := range ch {
+		fmt.Println(v)
+	}
+	c<-true
+}
+
+
+func main()  {
+	control:=make(chan bool)
+	ch := make(chan int,50)   //创建一个缓冲为3的channel
+	go writeData(ch)     //写入数据
+	go readData(ch,control)
+	<-control  //阻塞主进程
+
+}
+~~~
+
+#### 管道死锁
+
+- 死锁：程序无法停止，永远运行时，触发死锁
+
+- 触发情况：
+
+  - **无法读取引发死锁**: 当存在读chan时，若写chan没有传入管道关闭的EOF信号，则读chan引发死锁
+
+  ~~~go
+  package main
+  
+  import (
+  	"fmt"
+  	"time"
+  )
+  
+  func writeData (ch chan int)  {
+  	for i := 0; i < 51; i++ {
+  		ch<-i
+  
+  	}
+  }
+  
+  func readData(ch chan int,c chan bool)  {
+  	for v := range ch {   //写channel没有通知管道关闭，此处会永远阻塞，引发死锁
+  		time.Sleep(100)
+  		fmt.Println(v)
+  	}
+  	c<-true
+  
+  }
+  
+  
+  func main()  {
+  	control:=make(chan bool,2)
+  	ch := make(chan int,50)   //创建一个缓冲为3的channel
+  	go writeData(ch)     //写入数据
+  	go readData(ch,control)
+  	<-control
+  }
+  ~~~
+
+  - **无法写入引发死锁**：需写入的数据大于chan的缓冲数，并且不存在读chan时，引发死锁
+
+  ~~~go
+  package main
+  
+  import (
+  	"fmt"
+  	"time"
+  )
+  
+  func writeData (ch chan int,c chan bool)  {
+  	for i := 0; i < 51; i++  {  //此处写入数据量，大于chan缓冲数50,并不存在读chan，此处引发死锁；）
+  		ch<-i
+  
+  	}
+  	c<-true
+  }
+  
+  func main()  {
+  	control:=make(chan bool,2)
+  	ch := make(chan int,50)   
+  	go writeData(ch,control)     //写入数据
+  	<-control
+  }
+  ~~~
+
+  
